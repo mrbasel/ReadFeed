@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.deepOrange,
       ),
       body: 
-        Column(
+        ListView(
         children: <Widget>[
           Container(
             margin: EdgeInsets.all(20),
