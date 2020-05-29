@@ -64,7 +64,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           ),
-          FlatButton(
+          Align(
+            alignment: Alignment.center,
+            child: FlatButton(
             child: Text('Save'),
             color: Colors.blueAccent,
             onPressed: () async{
