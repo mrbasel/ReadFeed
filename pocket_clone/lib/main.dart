@@ -77,10 +77,53 @@ class _HomePageState extends State<HomePage> {
               });
             },
           ),
-          renderArticle(),          
+          ),
+          
+          renderArticle(),
+          Container(
+            child: Text('Saved Articles',
+          style: TextStyle(
+            fontSize: 28,
+          ),
+          textAlign: TextAlign.center,
+          ),
+          margin: EdgeInsets.only(top: 20, bottom: 15),
+          ),
         ],
       ),
  
     );
+  }
+}
+
+
+class ArticleListItem extends StatelessWidget {
+  final String websiteName;
+  final String articleTitle;
+
+  final Decoration containerDecoration = BoxDecoration(
+    border: Border(
+      bottom: BorderSide(
+        color: Colors.grey,
+        width: 1),
+      )
+      );
+
+  ArticleListItem(this.articleTitle, this.websiteName);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+            child: ListTile(
+              title: Text(articleTitle),
+              trailing: Icon(Icons.more_horiz, size: 34,),
+              contentPadding: EdgeInsets.all(5),
+              subtitle: Text(websiteName),
+          ),
+
+          margin: EdgeInsets.symmetric(horizontal: 15),
+          decoration: containerDecoration
+          );
+    
   }
 }
