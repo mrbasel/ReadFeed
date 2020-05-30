@@ -109,9 +109,15 @@ class _HomePageState extends State<HomePage> {
             onPressed: () async{
               String articleUrl = controller.text;
               Map fetchedArticle = await getArticle(articleUrl);
-              setState(() {
-              article = fetchedArticle;
-              });
+              controller.clear();
+
+              // Firestore.instance.collection('articles').add({'title': fetchedArticle['title'], 'website': fetchedArticle['url']});
+              Firestore.instance.runTransaction((transaction) async {
+                CollectionReference reference = Firestore.instance.collection('articles');
+
+                await reference.add({'title': fetchedArticle['title'], 'website': fetchedArticle['url'], 'article_html': fetchedArticle['text']});
+              }
+              );
             },
           ),
           ),
