@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 // import 'dart:html';
 
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,8 +48,9 @@ class ArticlesListView extends StatelessWidget {
         String title = documents[index].data['title'].toString();
         String website = documents[index].data['website'].toString();
         String articleHtml = documents[index].data['article_html'].toString();
+        String articleUrl = documents[index].data['url'].toString();
         
-        return ArticleListItem(articleTitle: title, id: id, websiteName: website, articleHtml: articleHtml,);
+        return ArticleListItem(articleTitle: title, id: id, websiteName: website, articleHtml: articleHtml, url: articleUrl);
       }
       );
   }
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My app!'),
+        title: Text('Article Reader'),
         backgroundColor: Colors.deepOrange,
       ),
       body:
@@ -104,7 +107,7 @@ class _HomePageState extends State<HomePage> {
               Firestore.instance.runTransaction((transaction) async {
                 CollectionReference reference = Firestore.instance.collection('articles');
 
-                await reference.add({'title': fetchedArticle['title'], 'website': fetchedArticle['url'], 'article_html': fetchedArticle['text']});
+                await reference.add({'title': fetchedArticle['title'], 'website': fetchedArticle['url'], 'article_html': fetchedArticle['text'], 'url': fetchedArticle['url']});
               }
               );
             },
@@ -138,6 +141,7 @@ class ArticleListItem extends StatelessWidget {
   final String articleTitle;
   final String id;
   final String articleHtml;
+  final String url;
 
   final Decoration containerDecoration = BoxDecoration(
     border: Border(
@@ -147,7 +151,7 @@ class ArticleListItem extends StatelessWidget {
       )
       );
 
-  ArticleListItem({this.id, this.articleTitle, this.websiteName, this.articleHtml});
+  ArticleListItem({this.id, this.articleTitle, this.websiteName, this.articleHtml, this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +164,7 @@ class ArticleListItem extends StatelessWidget {
               onTap: (){
                 Navigator.push(context, 
                 MaterialPageRoute(
-                  builder: (context) => ArticlePage(id: id, articleTitle: articleTitle, websiteName: websiteName, articleHtml: articleHtml)
+                  builder: (context) => ArticlePage(id: id, articleTitle: articleTitle, websiteName: websiteName, articleHtml: articleHtml, articleUrl: url,)
                 )
                 );
               },
@@ -179,23 +183,47 @@ class ArticlePage extends StatelessWidget {
   final String articleTitle;
   final String id;
   final String articleHtml;
+  final String articleUrl;
 
-  ArticlePage({this.websiteName, this.articleTitle, this.id, this.articleHtml});
+  ArticlePage({this.websiteName, this.articleTitle, this.id, this.articleHtml, this.articleUrl});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(articleTitle),
+        title: Text('Article Reader'),
+        backgroundColor: Colors.deepOrange,
       ),
-      body: SingleChildScrollView(
-         child: Html(
-           data: articleHtml,
-           shrinkWrap: true,          
-           ),
-      )
-      
+      body: ArticleWebView(articleUrl)
     );
   }
 }
 
+
+
+class ArticleWebView extends StatefulWidget {
+  final String articleUrl;
+
+  ArticleWebView(this.articleUrl);
+
+  @override
+  ArticleWebViewState createState() => ArticleWebViewState(articleUrl);
+}
+
+class ArticleWebViewState extends State<ArticleWebView> {
+  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final String articleUrl;
+
+  ArticleWebViewState(this.articleUrl);
+  
+  @override
+  Widget build(BuildContext context) {
+    return WebView(
+        javascriptMode: JavascriptMode.unrestricted ,
+        initialUrl: articleUrl,
+        onWebViewCreated: (WebViewController webViewController){
+          _controller.complete(webViewController);
+        },
+      );
+  }
+}
