@@ -30,6 +30,7 @@ dependencies:
   moor_ffi: ^0.6.0
   path_provider:
   path:
+  webview_flutter: 
 
 
   # The following adds the Cupertino Icons font to your application.
