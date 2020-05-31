@@ -42,10 +42,12 @@ class ArticlesListView extends StatelessWidget {
       physics: ScrollPhysics(),
       itemCount: documents.length,
       itemBuilder: (BuildContext context, int index){
+        String id = documents[index].documentID;
         String title = documents[index].data['title'].toString();
         String website = documents[index].data['website'].toString();
+        String articleHtml = documents[index].data['article_html'].toString();
         
-        return ArticleListItem(title, website);
+        return ArticleListItem(articleTitle: title, id: id, websiteName: website, articleHtml: articleHtml,);
       }
       );
   }
@@ -62,24 +64,11 @@ class _HomePageState extends State<HomePage> {
   final controller = TextEditingController();
 
   getArticle(articleUrl) async{
-  Uri url = Uri.http('3439407f39d4.ngrok.io', '/save', {'url': articleUrl});
+  Uri url = Uri.http('a9d8ca92d277.ngrok.io', '/save', {'url': articleUrl});
   var response = await http.get(url);
   Map data = jsonDecode(response.body);
   return data;   
 }
-
-  // renderArticle(){
-  //   var data;
-  //   if (article != null){
-  //     data = article['title'];
-  //   }   
-  //   else{
-  //     data = '';
-  //   }
-  //   return Html(
-  //       data: data
-  //       );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +136,8 @@ class _HomePageState extends State<HomePage> {
 class ArticleListItem extends StatelessWidget {
   final String websiteName;
   final String articleTitle;
+  final String id;
+  final String articleHtml;
 
   final Decoration containerDecoration = BoxDecoration(
     border: Border(
@@ -156,7 +147,7 @@ class ArticleListItem extends StatelessWidget {
       )
       );
 
-  ArticleListItem(this.articleTitle, this.websiteName);
+  ArticleListItem({this.id, this.articleTitle, this.websiteName, this.articleHtml});
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +157,13 @@ class ArticleListItem extends StatelessWidget {
               trailing: Icon(Icons.more_horiz, size: 34,),
               contentPadding: EdgeInsets.all(5),
               subtitle: Text(websiteName),
+              onTap: (){
+                Navigator.push(context, 
+                MaterialPageRoute(
+                  builder: (context) => ArticlePage(id: id, articleTitle: articleTitle, websiteName: websiteName, articleHtml: articleHtml)
+                )
+                );
+              },
           ),
 
           margin: EdgeInsets.symmetric(horizontal: 15),
@@ -174,3 +172,30 @@ class ArticleListItem extends StatelessWidget {
     
   }
 }
+
+
+class ArticlePage extends StatelessWidget {
+  final String websiteName;
+  final String articleTitle;
+  final String id;
+  final String articleHtml;
+
+  ArticlePage({this.websiteName, this.articleTitle, this.id, this.articleHtml});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(articleTitle),
+      ),
+      body: SingleChildScrollView(
+         child: Html(
+           data: articleHtml,
+           shrinkWrap: true,          
+           ),
+      )
+      
+    );
+  }
+}
+
