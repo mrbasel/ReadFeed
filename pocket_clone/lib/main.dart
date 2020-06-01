@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-// import 'dart:html';
+
+import 'helpers.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+// import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -158,7 +159,21 @@ class ArticleListItem extends StatelessWidget {
     return Container(
             child: ListTile(
               title: Text(articleTitle),
-              trailing: Icon(Icons.more_horiz, size: 34,),
+              trailing: PopupMenuButton(
+                onSelected: (value) => articlePopupChoice(value, url, documentId: id),
+                itemBuilder: (BuildContext context ){
+                  return [
+                    PopupMenuItem(
+                      child: Text('Delete', style: TextStyle(color: Colors.red ),),
+                      value: 'delete',
+                      ),
+                      PopupMenuItem(
+                      child: Text('Share'),
+                      value: 'share',
+                      ),
+                  ];
+                },
+                ),
               contentPadding: EdgeInsets.all(5),
               subtitle: Text(websiteName),
               onTap: (){
