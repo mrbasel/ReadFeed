@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '../services/firestore.dart';
 import '../services/api.dart';
 import '../utils/helpers.dart';
@@ -10,50 +12,66 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
 
 
+class AddArticleButton extends StatelessWidget {
+  final controller = TextEditingController();
 
+  saveArticle() async{
+    String articleUrl = controller.text;
+    
+    // fetch article data from api
+    Map fetchedArticle = await getArticle(articleUrl);
+    controller.clear();
 
-class AddArticleForm extends StatelessWidget {
-  final controller;
-
-  AddArticleForm(this.controller);
-
+    // Add article to database
+    addArticle(fetchedArticle);
+    }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-            children: <Widget>[
-          Container(
-            margin: EdgeInsets.all(20),
-            child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: 'Enter url',
-            ),
+    return Positioned(
+          child: FloatingActionButton(
+          onPressed: () async{
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context){
+                return AlertDialog(
+                  title: Text("Add Article"),
+                  content: Container(
+                    margin: EdgeInsets.all(20),
+                    child: TextField(
+                    controller: controller,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'Enter url',
+                  ),
           ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: FlatButton(
-            child: Text('Save'),
-            color: Colors.blueAccent,
-            onPressed: () async{
-              String articleUrl = controller.text;
-              
-              // fetch article data from api
-              Map fetchedArticle = await getArticle(articleUrl);
-              controller.clear();
-              
-              // Add article to database
-              addArticle(fetchedArticle);
-            },
-          ),
-          ),
-
-            ],
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Save'),
+                      color: Colors.blueAccent,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        return saveArticle();
+                         }
+                        ),
+                    
+                  ],
             );
+              } 
+              );
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.blueAccent,
+          hoverColor: Colors.blue,
+          tooltip: 'Save an article',
+          ),
+          bottom:30,
+          left: 20,
+         );
   }
 }
-
 
 
 class ArticlesStream extends StatelessWidget {
@@ -200,10 +218,11 @@ class ArticleWebViewState extends State<ArticleWebView> {
   @override
   Widget build(BuildContext context) {
     return WebView(
-        javascriptMode: JavascriptMode.unrestricted ,
+        javascriptMode: JavascriptMode.unrestricted,
+
         initialUrl: articleUrl,
         onWebViewCreated: (WebViewController webViewController){
-          _controller.complete(webViewController);
+        _controller.complete(webViewController);
         },
       );
   }
