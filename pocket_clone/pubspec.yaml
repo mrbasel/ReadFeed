@@ -32,6 +32,7 @@ dependencies:
   path:
   webview_flutter:
   share: ^0.6.4+3 
+  flushbar: ^1.10.4
 
 
   # The following adds the Cupertino Icons font to your application.

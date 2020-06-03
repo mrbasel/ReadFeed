@@ -1,3 +1,5 @@
+// import 'package:flutter/services.dart';
+
 import 'package:flutter/services.dart';
 
 import '../services/firestore.dart';
@@ -8,6 +10,7 @@ import 'main_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flushbar/flushbar.dart';
 
 import 'dart:async';
 
@@ -225,5 +228,54 @@ class ArticleWebViewState extends State<ArticleWebView> {
         _controller.complete(webViewController);
         },
       );
+  }
+}
+
+
+
+
+// This displays a snackbar when the user enters the app
+// to save copied url 
+class ClipBoardSnackBar extends StatefulWidget {
+  @override
+  ClipBoardSnackBarState createState() => ClipBoardSnackBarState();
+}
+
+class ClipBoardSnackBarState extends State<ClipBoardSnackBar> {
+
+  @override
+  void initState() {
+    super.initState();
+    
+    // runs once when the widget gets loaded into the widget tree
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => showFlushBar('save', save: true));
+
+    }
+
+void showFlushBar(String message, {bool save}){
+  Flushbar(
+      message: 'Save copied Url?',
+      mainButton: FlatButton(
+       child: Text('Save', style: TextStyle(color: Colors.white),),
+        onPressed: () async {
+          if (save == true){
+          // Get link from keyboard
+          var clipBoardData = await Clipboard.getData('text/plain');
+          String clipBoardText = clipBoardData.text; 
+          
+          // Save link/article
+          var article = await getArticle(clipBoardText);
+          addArticle(article);
+          }
+        },
+        ),
+      duration: Duration(seconds: 4),
+      )..show(context);
+    }
+
+  Widget build(BuildContext context) {
+    return Container(
+    );
   }
 }
