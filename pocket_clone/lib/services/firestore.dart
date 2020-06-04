@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 void addArticle(article){
   Firestore.instance.runTransaction((transaction) async {
     CollectionReference reference = Firestore.instance.collection('articles');
-    Map<String, dynamic> data = {'title': article['title'], 'website': article['url'], 'article_html': article['text'], 'url': article['url'], 'time': Timestamp.now()};
+    Map<String, dynamic> data = {'title': article['title'], 'domain': article['domain'], 'url': article['url'], 'time': Timestamp.now()};
     await reference.add(data);
       }
     );

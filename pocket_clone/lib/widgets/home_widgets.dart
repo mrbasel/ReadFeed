@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import '../services/firestore.dart';
 import '../services/api.dart';
 import '../utils/helpers.dart';
-import 'main_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -119,11 +118,10 @@ class ArticlesListView extends StatelessWidget {
       itemBuilder: (BuildContext context, int index){
         String id = documents[index].documentID;
         String title = documents[index].data['title'].toString();
-        String website = documents[index].data['website'].toString();
-        String articleHtml = documents[index].data['article_html'].toString();
+        String domain = documents[index].data['domain'].toString();
         String articleUrl = documents[index].data['url'].toString();
         
-        return ArticleListItem(articleTitle: title, id: id, websiteName: website, articleHtml: articleHtml, url: articleUrl);
+        return ArticleListItem(articleTitle: title, id: id, domain: domain, url: articleUrl);
       }
       );
   }
@@ -131,10 +129,9 @@ class ArticlesListView extends StatelessWidget {
 
 
 class ArticleListItem extends StatelessWidget {
-  final String websiteName;
   final String articleTitle;
   final String id;
-  final String articleHtml;
+  final String domain;
   final String url;
 
   final Decoration containerDecoration = BoxDecoration(
@@ -146,7 +143,7 @@ class ArticleListItem extends StatelessWidget {
       )
       );
 
-  ArticleListItem({this.id, this.articleTitle, this.websiteName, this.articleHtml, this.url});
+  ArticleListItem({this.id, this.articleTitle, this.domain, this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +166,7 @@ class ArticleListItem extends StatelessWidget {
                 },
                 ),
               contentPadding: EdgeInsets.all(5),
-              subtitle: Text(websiteName),
+              subtitle: Text(domain),
               onTap: (){
                 Navigator.push(context, 
                 MaterialPageRoute(
