@@ -93,7 +93,7 @@ class ArticlesStream extends StatelessWidget {
           ),
           
         StreamBuilder(
-          stream: Firestore.instance.collection('articles').snapshots(),
+          stream: Firestore.instance.collection('articles').orderBy('time', descending: true).snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) return CircularProgressIndicator();
               return ArticlesListView(documents: snapshot.data.documents);
