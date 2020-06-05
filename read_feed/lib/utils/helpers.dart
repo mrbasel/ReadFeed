@@ -4,12 +4,30 @@ import 'package:share/share.dart';
 import '../services/firestore.dart';
 import '../services/api.dart';
 
+import 'package:flushbar/flushbar.dart';
+
+
 // Options menu
-articlePopupChoice({String choice, String url, String documentId}){
-  if (choice == 'share') return Share.share(url);
+articlePopupChoice({String choice, Article article, context}){
+  if (choice == 'share') return Share.share(article.url);
   
   else if (choice == 'delete') {
-    deleteArticle(documentId);
+    deleteArticle(article.id);
+    Flushbar(
+      message: 'Article deleted',
+      duration: Duration(seconds: 4),
+      mainButton: FlatButton(
+        child: Text('Undo',
+        style: TextStyle(
+          color: Colors.white
+        ),
+        ),
+        onPressed: (){
+          saveArticle(url: article.url);
+        },
+        ),
+
+    )..show(context);
 }
 }
 
@@ -19,6 +37,7 @@ saveArticle({controller, url}) async{
   
   if (controller != null){
     articleUrl = controller.text;
+    controller.clear();
 
   }
   else {
@@ -28,7 +47,6 @@ saveArticle({controller, url}) async{
     
     // fetch article data from api
     Map fetchedArticle = await getArticle(articleUrl);
-    controller.clear();
 
     // Add article to database
     addArticle(fetchedArticle);

@@ -1,7 +1,5 @@
 import 'package:flutter/services.dart';
 
-import '../services/firestore.dart';
-import '../services/api.dart';
 import '../utils/helpers.dart';
 import '../widgets/webview_widgets.dart';
 import '../models/models.dart';
@@ -144,7 +142,7 @@ class ArticleListItem extends StatelessWidget {
               
               // ListTile options menu
               trailing: PopupMenuButton(
-                onSelected: (choice) => articlePopupChoice(choice: choice, url: article.url, documentId: article.id),
+                onSelected: (choice) => articlePopupChoice(choice: choice, article: article, context: context),
                 itemBuilder: (BuildContext context ){
                   return [
                     PopupMenuItem(
