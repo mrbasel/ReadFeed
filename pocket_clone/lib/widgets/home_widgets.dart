@@ -4,6 +4,7 @@ import '../services/firestore.dart';
 import '../services/api.dart';
 import '../utils/helpers.dart';
 import '../widgets/webview_widgets.dart';
+import '../models/models.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,17 +14,6 @@ import 'package:flushbar/flushbar.dart';
 
 class AddArticleButton extends StatelessWidget {
   final controller = TextEditingController();
-
-  saveArticle() async{
-    String articleUrl = controller.text;
-    
-    // fetch article data from api
-    Map fetchedArticle = await getArticle(articleUrl);
-    controller.clear();
-
-    // Add article to database
-    addArticle(fetchedArticle);
-    }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +42,7 @@ class AddArticleButton extends StatelessWidget {
                       color: Colors.blueAccent,
                       onPressed: () {
                         Navigator.pop(context);
-                        return saveArticle();
+                        return saveArticle(controller: controller);
                          }
                         ),
                     
@@ -66,8 +56,8 @@ class AddArticleButton extends StatelessWidget {
           hoverColor: Colors.blue,
           tooltip: 'Save an article',
           ),
-          bottom:30,
-          left: 20,
+          bottom: 40,
+          right: 20,
          );
   }
 }
@@ -117,8 +107,15 @@ class ArticlesListView extends StatelessWidget {
         String title = documents[index].data['title'].toString();
         String domain = documents[index].data['domain'].toString();
         String articleUrl = documents[index].data['url'].toString();
+
+        Article article = Article(
+          id: id,
+          title: title,
+          url: articleUrl,
+          domain: domain
+        );
         
-        return ArticleListItem(articleTitle: title, id: id, domain: domain, url: articleUrl);
+        return ArticleListItem(article: article);
       }
       );
   }
@@ -126,10 +123,7 @@ class ArticlesListView extends StatelessWidget {
 
 
 class ArticleListItem extends StatelessWidget {
-  final String articleTitle;
-  final String id;
-  final String domain;
-  final String url;
+  final Article article;
 
   final Decoration containerDecoration = BoxDecoration(
     border: Border(
@@ -140,17 +134,17 @@ class ArticleListItem extends StatelessWidget {
       )
       );
 
-  ArticleListItem({this.id, this.articleTitle, this.domain, this.url});
+  ArticleListItem({this.article});
 
   @override
   Widget build(BuildContext context) {
     return Container(
             child: ListTile(
-              title: Text(articleTitle),
+              title: Text(article.title),
               
               // ListTile options menu
               trailing: PopupMenuButton(
-                onSelected: (value) => articlePopupChoice(value, url, documentId: id),
+                onSelected: (choice) => articlePopupChoice(choice: choice, url: article.url, documentId: article.id),
                 itemBuilder: (BuildContext context ){
                   return [
                     PopupMenuItem(
@@ -165,11 +159,11 @@ class ArticleListItem extends StatelessWidget {
                 },
                 ),
               contentPadding: EdgeInsets.all(5),
-              subtitle: Text(domain),
+              subtitle: Text(article.domain),
               onTap: (){
                 Navigator.push(context, 
                 MaterialPageRoute(
-                  builder: (context) => ArticlePage(articleUrl: url,)
+                  builder: (context) => ArticlePage(articleUrl: article.url,)
                 )
                 );
               },
@@ -215,8 +209,7 @@ void showFlushBar(String message, {bool save}){
           String clipBoardText = clipBoardData.text; 
           
           // Save link/article
-          var article = await getArticle(clipBoardText);
-          addArticle(article);
+          saveArticle(url: clipBoardText);
           }
         },
         ),
