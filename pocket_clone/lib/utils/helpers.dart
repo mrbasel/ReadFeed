@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:ReadFeed/models/models.dart';
 import 'package:share/share.dart';
 import '../services/firestore.dart';
 import '../services/api.dart';

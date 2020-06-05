@@ -2,6 +2,6 @@ import 'package:flutter/material.dart';
 
 AppBar mainAppBar = 
   AppBar(
-        title: Text('Article Reader'),
+        title: Text('ReadFeed'),
         backgroundColor: Colors.deepOrange,
       );

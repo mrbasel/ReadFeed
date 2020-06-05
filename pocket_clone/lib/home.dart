@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_clone/widgets/main_widgets.dart';
+import 'package:ReadFeed/widgets/main_widgets.dart';
 
 import 'screens/home_screen.dart';
 

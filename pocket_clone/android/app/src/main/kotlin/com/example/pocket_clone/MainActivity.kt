@@ -1,4 +1,4 @@
-package com.example.pocket_clone
+package com.example.ReadFeed
 
 import io.flutter.embedding.android.FlutterActivity
 
