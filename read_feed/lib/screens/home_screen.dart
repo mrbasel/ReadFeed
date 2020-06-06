@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
         
         // Floating button for saving articles
         AddArticleButton(),
-        ClipBoardSnackBar(),
+        // ClipBoardSnackBar(),
       ],
     );  
 
