@@ -161,7 +161,7 @@ class ArticleListItem extends StatelessWidget {
               onTap: (){
                 Navigator.push(context, 
                 MaterialPageRoute(
-                  builder: (context) => ArticlePage(articleUrl: article.url,)
+                  builder: (context) => ArticleWebView(article.url,)
                 )
                 );
               },
