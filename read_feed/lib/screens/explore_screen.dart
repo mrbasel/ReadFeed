@@ -23,15 +23,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   getArticles() async{
-    Uri url = Uri.http('f9501cfa1611.ngrok.io', '/get_articles');
+    Uri url = Uri.http('read-feed-api.herokuapp.com', '/get_articles');
     var r = await http.get(url);
     var body = jsonDecode(r.body);
 
      for (var article in body['articles']) {
-       articlesList.add(Article(
+       articlesList.add(
+         Article(
          title: article['title'].split('-')[0],
          url: article['url'],
-         domain: article['source']['name']
+         domain: article['source']['name'],
+         image: article['urlToImage']
        ));
      }
   }

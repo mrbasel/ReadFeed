@@ -110,7 +110,7 @@ class ArticlesListView extends StatelessWidget {
           id: id,
           title: title,
           url: articleUrl,
-          domain: domain
+          domain: domain,
         );
         
         return ArticleListItem(article: article);
@@ -134,28 +134,45 @@ class ArticleListItem extends StatelessWidget {
 
   ArticleListItem({this.article});
 
+  getImage(){
+    Image image; 
+    try {
+      image = Image.network(article.image);
+    
+    } catch (e) {
+      return SizedBox.shrink();
+    }
+    return image;
+  }
+
+  showOptionsAppBar(){
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
             child: ListTile(
               title: Text(article.title),
+              trailing: getImage(),
+              onLongPress: () => print('Long press!'),
+              // TODO: Implement options menu
               
               // ListTile options menu
-              trailing: PopupMenuButton(
-                onSelected: (choice) => articlePopupChoice(choice: choice, article: article, context: context),
-                itemBuilder: (BuildContext context ){
-                  return [
-                    PopupMenuItem(
-                      child: Text('Delete', style: TextStyle(color: Colors.red ),),
-                      value: 'delete',
-                      ),
-                      PopupMenuItem(
-                      child: Text('Share'),
-                      value: 'share',
-                      ),
-                  ];
-                },
-                ),
+              // trailing: PopupMenuButton(
+              //   onSelected: (choice) => articlePopupChoice(choice: choice, article: article, context: context),
+              //   itemBuilder: (BuildContext context ){
+              //     return [
+              //       PopupMenuItem(
+              //         child: Text('Delete', style: TextStyle(color: Colors.red ),),
+              //         value: 'delete',
+              //         ),
+              //         PopupMenuItem(
+              //         child: Text('Share'),
+              //         value: 'share',
+              //         ),
+              //     ];
+              //   },
+              //   ),
               contentPadding: EdgeInsets.all(5),
               subtitle: Text(article.domain),
               onTap: (){
