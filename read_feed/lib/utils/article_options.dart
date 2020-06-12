@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ReadFeed/models/models.dart';
 import 'package:share/share.dart';
-import '../services/firestore.dart';
-import '../services/api.dart';
-
 import 'package:flushbar/flushbar.dart';
 
+import 'package:ReadFeed/models/models.dart';
+import 'package:ReadFeed/services/firestore.dart';
+import 'save_article.dart';
 
-// Options menu
+
 articlePopupChoice({String choice, Article article, context}){
   if (choice == 'share') return Share.share(article.url);
   
@@ -30,24 +29,3 @@ articlePopupChoice({String choice, Article article, context}){
     )..show(context);
 }
 }
-
-// Gets data(url) from input field
-saveArticle({controller, url}) async{
-  String articleUrl;
-  
-  if (controller != null){
-    articleUrl = controller.text;
-    controller.clear();
-
-  }
-  else {
-    articleUrl = url;
-  }
-
-    
-    // fetch article data from api
-    Map fetchedArticle = await getArticle(articleUrl);
-
-    // Add article to database
-    addArticle(fetchedArticle);
-    }

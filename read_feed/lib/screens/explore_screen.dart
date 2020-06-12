@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 
 import 'package:ReadFeed/models/models.dart';
-import 'package:ReadFeed/widgets/home_widgets.dart';
+import '../widgets/appbar_widgets.dart';
+import 'package:ReadFeed/widgets/article_widgets/article_item.dart';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 
 class ExploreScreen extends StatefulWidget {
@@ -15,11 +17,13 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   List<Article> articlesList = [];
   var data;
+  var currentAppBar;
 
   @override
   void initState(){
     super.initState();
-    data = getArticles();    
+    data = getArticles();  
+    currentAppBar = AppBarWidgets.mainAppBar;  
   }
 
   getArticles() async{
@@ -38,6 +42,22 @@ class _ExploreScreenState extends State<ExploreScreen> {
      }
   }
 
+  void changeAppBar(){
+    if (currentAppBar == AppBarWidgets.mainAppBar){
+      setState(() {
+        currentAppBar = OptionsAppBar(callBackFunction: (){
+          setState(() {
+          currentAppBar = AppBarWidgets.mainAppBar;
+          }
+          );
+        }
+        );
+      }
+      );
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +70,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             return ListView.builder(
               itemCount: articlesList.length,
               itemBuilder: (BuildContext context, int index){
-                return ArticleListItem(article: articlesList[index]);
+                return ArticleListItem(article: articlesList[index], callbackFunction: changeAppBar,);
               }
               );
           }

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/home_widgets.dart';
+import 'package:ReadFeed/widgets/article_widgets/add_article.dart';
+import 'package:ReadFeed/widgets/article_widgets/article_stream.dart';
 
 
 
