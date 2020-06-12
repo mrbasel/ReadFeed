@@ -40,7 +40,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      appBar: currentAppBar,
+      body: Container(
       child: FutureBuilder(
         future: data,
         builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -58,6 +60,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         }
         ),
       margin: EdgeInsets.symmetric(vertical: 15, horizontal: 0)
-      );
+      ),
+    );
   }
 }

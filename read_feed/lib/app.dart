@@ -20,8 +20,13 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: mainAppBar,
-      body: tabs[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: <Widget>[
+          HomeScreen(),
+          ExploreScreen()
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         items: [

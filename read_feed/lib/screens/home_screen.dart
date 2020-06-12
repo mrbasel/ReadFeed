@@ -9,7 +9,11 @@ class HomeScreen extends StatelessWidget {
   final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('List'),
+      ),
+      body: Stack(
       children: <Widget>[
         ListView(
           children: <Widget>[
@@ -21,7 +25,8 @@ class HomeScreen extends StatelessWidget {
         AddArticleButton(),
         // ClipBoardSnackBar(),
       ],
-    );  
+    )  
 
+    );
   }
 }
