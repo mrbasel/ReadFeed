@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppBarModel>(
         builder: (context, _, model) => Scaffold(
-            appBar: model.isSelected ? OptionsAppBar() : AppBar(title: Text('My List'),) ,
+            appBar: model.isSelected ? OptionsAppBar() : MainAppBar() ,
             body: Stack(
               children: <Widget>[
                 ListView(

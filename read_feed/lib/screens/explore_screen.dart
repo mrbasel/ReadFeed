@@ -23,7 +23,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   void initState(){
     super.initState();
     data = getArticles();  
-    currentAppBar = AppBarWidgets.mainAppBar;  
+    currentAppBar = MainAppBar();  
   }
 
   getArticles() async{
@@ -42,21 +42,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
      }
   }
 
-  void changeAppBar(){
-    if (currentAppBar == AppBarWidgets.mainAppBar){
-      setState(() {
-        currentAppBar = OptionsAppBar(callBackFunction: (){
-          setState(() {
-          currentAppBar = AppBarWidgets.mainAppBar;
-          }
-          );
-        }
-        );
-      }
-      );
-    }
+  // void changeAppBar(){
+  //   if (currentAppBar == AppBarWidgets.mainAppBar){
+  //     setState(() {
+  //       currentAppBar = OptionsAppBar(callBackFunction: (){
+  //         setState(() {
+  //         currentAppBar = AppBarWidgets.mainAppBar;
+  //         }
+  //         );
+  //       }
+  //       );
+  //     }
+  //     );
+  //   }
 
-  }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             return ListView.builder(
               itemCount: articlesList.length,
               itemBuilder: (BuildContext context, int index){
-                return ArticleListItem(article: articlesList[index], callbackFunction: changeAppBar,);
+                return ArticleListItem(article: articlesList[index],);
               }
               );
           }
