@@ -31,7 +31,7 @@ class ArticleListItem extends StatelessWidget {
         child: ScopedModelDescendant<AppBarModel>(
             builder: (context, _, model) => ListTile(
                   title: Text(article.title),
-                  selected: model.isSelected ?? false,
+                  selected: model.isSelected && model.selectedArticle.url == article.url ? true : false ,
                   trailing: getImage(),
                   onLongPress: () {
                     model.showOptionsAppbar(article);

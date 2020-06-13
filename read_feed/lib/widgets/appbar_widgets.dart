@@ -1,10 +1,12 @@
+import 'package:ReadFeed/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flushbar/flushbar.dart';
 
 import 'package:ReadFeed/models/models.dart';
 import 'package:ReadFeed/utils/article_options.dart';
-
-
+import 'package:ReadFeed/utils/save_article.dart';
+import 'package:ReadFeed/utils/show_flush_bar.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   MainAppBar({Key key, this.title, this.color})
@@ -21,7 +23,6 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _MainAppBarState extends State<MainAppBar> {
- 
   // Article selectedArticle;
 
   @override
@@ -33,9 +34,8 @@ class _MainAppBarState extends State<MainAppBar> {
   }
 }
 
-
 class OptionsAppBar extends StatefulWidget implements PreferredSizeWidget {
-  OptionsAppBar({Key key, this.callBackFunction})
+  OptionsAppBar({Key key, this.callBackFunction, this.optionButton})
       : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
 
@@ -43,15 +43,13 @@ class OptionsAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Size preferredSize; // default is 56.0
 
   final Function callBackFunction;
+  final Widget optionButton;
 
   @override
   _OptionsAppBarState createState() => _OptionsAppBarState();
 }
 
 class _OptionsAppBarState extends State<OptionsAppBar> {
-  Color backButtonColor = Colors.white;
-  Color forwardButtonColor = Colors.white;
-  // Article selectedArticle;
 
   @override
   Widget build(BuildContext context) {
@@ -59,26 +57,17 @@ class _OptionsAppBarState extends State<OptionsAppBar> {
         builder: (context, _, model) => AppBar(
               backgroundColor: Colors.blueAccent[100],
               actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.delete), onPressed: () => print('Delete')),
+                widget.optionButton ?? SizedBox.shrink(),
                 PopupMenuButton(
                   onSelected: (choice) {
                     articlePopupChoice(
-                      choice: choice,
-                      context: context,
-                      article: model.selectedArticle
-                      );
-                      model.hideOptionsAppbar();
-                    },
+                        choice: choice,
+                        context: context,
+                        article: model.selectedArticle);
+                    model.hideOptionsAppbar();
+                  },
                   itemBuilder: (BuildContext context) {
                     return [
-                      PopupMenuItem(
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        value: 'delete',
-                      ),
                       PopupMenuItem(
                         child: Text('Share'),
                         value: 'share',

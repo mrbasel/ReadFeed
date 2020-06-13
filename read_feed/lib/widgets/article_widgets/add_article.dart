@@ -19,6 +19,7 @@ class AddArticleButton extends StatelessWidget {
                   content: Container(
                     margin: EdgeInsets.all(20),
                     child: TextField(
+                      // TODO: Validate empty input
                       controller: controller,
                       autofocus: true,
                       decoration: InputDecoration(

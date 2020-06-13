@@ -6,6 +6,7 @@ import 'package:ReadFeed/widgets/article_widgets/add_article.dart';
 import 'package:ReadFeed/widgets/article_widgets/article_stream.dart';
 import 'package:ReadFeed/models/models.dart';
 import 'package:ReadFeed/widgets/appbar_widgets.dart';
+import 'package:ReadFeed/widgets/appbar_options_widgets/option_widgets.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppBarModel>(
         builder: (context, _, model) => Scaffold(
-            appBar: model.isSelected ? OptionsAppBar() : MainAppBar() ,
+            appBar: model.isSelected ? OptionsAppBar(optionButton: DeleteIcon(model: model,),) : MainAppBar() ,
             body: Stack(
               children: <Widget>[
                 ListView(

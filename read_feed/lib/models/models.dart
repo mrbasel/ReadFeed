@@ -21,13 +21,13 @@ class AppBarModel extends Model {
   Article get selectedArticle => _selectedArticle;
 
 hideOptionsAppbar(){
-  _selectedArticle = null;
   _isSelected = !_isSelected;
   notifyListeners();
 }
 
   
   showOptionsAppbar(Article article){
+    _selectedArticle = null;
     _isSelected = !_isSelected;
     _selectedArticle = article;
     notifyListeners();
