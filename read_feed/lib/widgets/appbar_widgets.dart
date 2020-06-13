@@ -1,78 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import 'package:ReadFeed/models/models.dart';
+import 'package:ReadFeed/utils/article_options.dart';
 
 class AppBarWidgets {
   static AppBar mainAppBar = AppBar(
     title: Text('News'),
   );
-  
+
   static AppBar optionsAppBar = AppBar(
     backgroundColor: Colors.blueAccent[100],
     actions: <Widget>[
       IconButton(icon: Icon(Icons.delete), onPressed: () => print('Delete')),
-      PopupMenuButton(  
+      PopupMenuButton(
         onSelected: (choice) => print(choice),
-      itemBuilder: (BuildContext context ){
+        itemBuilder: (BuildContext context) {
           return [
             PopupMenuItem(
-              child: Text('Delete', style: TextStyle(color: Colors.red ),),
-            value: 'delete',
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+              value: 'delete',
             ),
             PopupMenuItem(
               child: Text('Share'),
-            value: 'share',
+              value: 'share',
             ),
-        ];
-      },
+          ];
+        },
       ),
     ],
-    leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () => print('back'), color: Colors.white,),
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () => print('back'),
+      color: Colors.white,
+    ),
   );
 }
-
-
 
 class OptionsAppBar extends StatefulWidget implements PreferredSizeWidget {
-    OptionsAppBar({Key key, this.callBackFunction}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
+  OptionsAppBar({Key key, this.callBackFunction})
+      : preferredSize = Size.fromHeight(kToolbarHeight),
+        super(key: key);
 
-    @override
-    final Size preferredSize; // default is 56.0
+  @override
+  final Size preferredSize; // default is 56.0
 
-    final Function callBackFunction;
-  
-  
-    @override
-    _OptionsAppBarState createState() => _OptionsAppBarState();
+  final Function callBackFunction;
+
+  @override
+  _OptionsAppBarState createState() => _OptionsAppBarState();
 }
 
- class _OptionsAppBarState extends State<OptionsAppBar> {
-   Color backButtonColor = Colors.white;
-   Color forwardButtonColor = Colors.white;
-   
+class _OptionsAppBarState extends State<OptionsAppBar> {
+  Color backButtonColor = Colors.white;
+  Color forwardButtonColor = Colors.white;
+  // Article selectedArticle;
 
-     @override
-     Widget build(BuildContext context) {
-       return AppBar(
-    backgroundColor: Colors.blueAccent[100],
-    actions: <Widget>[
-      IconButton(icon: Icon(Icons.delete), onPressed: () => print('Delete')),
-      PopupMenuButton(  
-        onSelected: (choice) => print(choice),
-      itemBuilder: (BuildContext context ){
-          return [
-            PopupMenuItem(
-              child: Text('Delete', style: TextStyle(color: Colors.red ),),
-            value: 'delete',
-            ),
-            PopupMenuItem(
-              child: Text('Share'),
-            value: 'share',
-            ),
-        ];
-      },
-      ),
-    ],
-    leading: IconButton(icon: Icon(Icons.arrow_back), color: Colors.white, onPressed: () => widget.callBackFunction()),
-  );
-     }
- }
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<AppBarModel>(
+        builder: (context, _, model) => AppBar(
+              backgroundColor: Colors.blueAccent[100],
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.delete), onPressed: () => print('Delete')),
+                PopupMenuButton(
+                  onSelected: (choice) {
+                    articlePopupChoice(
+                      choice: choice,
+                      context: context,
+                      article: model.selectedArticle
+                      );
+                      model.hideOptionsAppbar();
+                    },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(
+                        child: Text(
+                          'Delete',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        value: 'delete',
+                      ),
+                      PopupMenuItem(
+                        child: Text('Share'),
+                        value: 'share',
+                      ),
+                    ];
+                  },
+                ),
+              ],
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  color: Colors.white,
+                  onPressed: () => model.hideOptionsAppbar()),
+            ));
+  }
+}
