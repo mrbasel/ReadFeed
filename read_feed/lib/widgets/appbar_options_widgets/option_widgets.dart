@@ -53,7 +53,7 @@ class SaveIcon extends StatelessWidget {
           };
           addArticle(article);
           model.hideOptionsAppbar();
-          showFlushBar(context: context, message: 'Article Saved');
+          showFlushBar(context: context, message: 'Article Saved', duration: Duration(seconds: 1, milliseconds: 500));
         });
   }
 }

@@ -49,10 +49,10 @@ import 'save_article.dart';
 //   }
 // }
 
-showFlushBar({String message, @required context, Widget button}) {
+showFlushBar({String message, @required context, Widget button, Duration duration}) {
   return Flushbar(
     message: message,
-    duration: Duration(seconds: 4),
+    duration: duration ?? Duration(seconds: 3),
     mainButton: button,
   )..show(context);
 }
