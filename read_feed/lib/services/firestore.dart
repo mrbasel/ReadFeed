@@ -8,6 +8,7 @@ void addArticle(article) {
       'title': article['title'],
       'domain': article['domain'],
       'url': article['url'],
+      'image': article['image'],
       'time': Timestamp.now()
     };
     await reference.add(data);

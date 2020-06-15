@@ -22,12 +22,14 @@ class ArticlesListView extends StatelessWidget {
         String title = documents[index].data['title'].toString();
         String domain = documents[index].data['domain'].toString();
         String articleUrl = documents[index].data['url'].toString();
+        String image = documents[index].data['image'].toString();
 
         Article article = Article(
           id: id,
           title: title,
           url: articleUrl,
           domain: domain,
+          image: image
         );
         
         return ArticleListItem(article: article);

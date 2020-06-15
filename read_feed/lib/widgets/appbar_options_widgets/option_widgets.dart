@@ -44,11 +44,11 @@ class SaveIcon extends StatelessWidget {
     return IconButton(
         icon: Icon(Icons.save_alt),
         onPressed: () {
-          print(model.selectedArticle);
           Map article = {
             'title': model.selectedArticle.title,
             'domain': model.selectedArticle.domain,
             'url': model.selectedArticle.url,
+            'image': model.selectedArticle.image,
             'time': Timestamp.now()
           };
           addArticle(article);
